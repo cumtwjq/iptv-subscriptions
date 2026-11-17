@@ -80,6 +80,11 @@
     "file": "aptv-zjyd.m3u"
   },
   {
+    "name": "aptv-iptv",
+    "url": "https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u",
+    "file": "aptv-iptv.m3u"
+  },
+  {
     "name": "ha-cmcc-iptv",
     "url": "https://elykia093.github.io/HA-CMCC-IPTV/index.m3u",
     "file": "ha-cmcc-iptv.m3u"

@@ -4,7 +4,7 @@
 
 来源：
 
-- [Kimentanm/aptv](https://github.com/Kimentanm/aptv) 的 `m3u` 目录中 16 个按省份命名的移动 IPTV 列表；跳过演示、广播、视频样例和其他用途的文件
+- [Kimentanm/aptv](https://github.com/Kimentanm/aptv) 的 `m3u` 目录中 16 个按省份命名的移动 IPTV 列表，以及通用的 `iptv.m3u`；跳过演示、广播、视频样例和其他用途的文件
 - [Elykia093/HA-CMCC-IPTV](https://github.com/Elykia093/HA-CMCC-IPTV) 的 `public/index.m3u`
 
 GitHub Actions 每 6 小时更新一次。来源清单见 `sources.json`；如果某次抓取失败，不会把错误页面写入订阅文件，已有文件仍保留。
@@ -18,6 +18,7 @@ GitHub Actions 每 6 小时更新一次。来源清单见 `sources.json`；如�
 - 飞牛 NAS：`http://NAS地址:8098/aptv-hnyd.m3u`
 
 HA-CMCC-IPTV 的文件名是 `ha-cmcc-iptv.m3u`。
+APTV 通用列表的文件名是 `aptv-iptv.m3u`；其中一些线路带有 APTV 专用请求标记，其他播放器是否兼容需要实际测试。
 
 Raw 仍使用 `raw.githubusercontent.com`。如果电视所在网络访问不了该域名，换成自己的 Raw 也不能解决；可以使用 Pages 或 NAS 地址。
 
