@@ -24,6 +24,8 @@ Raw 仍使用 `raw.githubusercontent.com`。如果电视所在网络访问不了
 
 ## 飞牛 NAS
 
-`nas` 文件夹中提供 Docker Compose 服务。复制到 NAS 后执行 `docker compose up -d --build`。它每 30 分钟从本仓库 Pages 地址更新订阅，并缓存到 `nas/cache`；网络暂时断开时保留上次可用文件。`8098` 是示例端口，可以在 `nas/compose.yaml` 调整。
+飞牛 NAS 上已部署 `iptv-m3u-cache` 项目，目录是 `/vol2/1000/docker/iptv-m3u-cache`，使用 `8098` 端口。项目直接运行 Python 基础镜像，不需要构建镜像。启动时从本仓库 Pages 下载服务程序，之后每 30 分钟更新订阅，并缓存到该目录的 `cache` 文件夹；订阅源暂时不可访问时保留上次可用文件。
+
+在其他 NAS 上部署时，先拉取 `docker.1ms.run/library/python:3.13-slim` 镜像，再将 `nas/compose.yaml` 复制到项目目录，执行 `docker compose up -d`。首次启动需要能访问本仓库的 GitHub Pages。
 
 若要从外网访问，给 NAS 配置自己的 HTTPS 域名和反向代理，将该域名的一个路径或子域名转发到此服务的 `8098` 端口。此服务只缓存 M3U 列表，不转发视频流；频道能否播放仍取决于播放设备所在网络能否访问 M3U 内的地址。
