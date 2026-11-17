@@ -1,6 +1,9 @@
 name: Sync selected M3U files
 
 on:
+  push:
+    paths:
+      - nas/server.py
   workflow_dispatch:
   schedule:
     - cron: '17 */6 * * *'
