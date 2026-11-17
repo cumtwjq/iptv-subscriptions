@@ -11,14 +11,30 @@ GitHub Actions 每 6 小时更新一次。来源清单见 `sources.json`；如�
 
 ## 订阅地址
 
-把下面地址里的文件名换成 `sources.json` 中任意 `file` 字段即可：
+在直播软件里选择「添加订阅」或「导入 M3U」，粘贴下表对应的完整地址。`https://iptv.wwjjqq.top/` 只是服务首页，订阅地址必须包含 `.m3u` 文件名。直接用浏览器打开订阅时会显示 M3U 文本；浏览器本身不会播放里面的频道。
 
-- Raw：`https://raw.githubusercontent.com/cumtwjq/iptv-subscriptions/main/m3u/aptv-hnyd.m3u`
-- Pages：`https://cumtwjq.github.io/iptv-subscriptions/aptv-hnyd.m3u`
-- 飞牛 NAS：`http://NAS地址:8098/aptv-hnyd.m3u`
+| 订阅 | 外网地址 |
+| --- | --- |
+| 安徽移动 | `https://iptv.wwjjqq.top/aptv-ahyd.m3u` |
+| 北京移动 | `https://iptv.wwjjqq.top/aptv-bjyd.m3u` |
+| 福建移动 | `https://iptv.wwjjqq.top/aptv-fjyd.m3u` |
+| 广西移动 | `https://iptv.wwjjqq.top/aptv-gxyd.m3u` |
+| 贵州移动 | `https://iptv.wwjjqq.top/aptv-gzyd.m3u` |
+| 河北移动 | `https://iptv.wwjjqq.top/aptv-hbyd.m3u` |
+| 黑龙江移动 | `https://iptv.wwjjqq.top/aptv-hljyd.m3u` |
+| 河南移动 | `https://iptv.wwjjqq.top/aptv-hnyd.m3u` |
+| 湖南移动 | `https://iptv.wwjjqq.top/aptv-hunyd.m3u` |
+| 江苏移动 | `https://iptv.wwjjqq.top/aptv-jsyd.m3u` |
+| 江西移动 | `https://iptv.wwjjqq.top/aptv-jxyd.m3u` |
+| 辽宁移动 | `https://iptv.wwjjqq.top/aptv-lnyd.m3u` |
+| 山东移动 | `https://iptv.wwjjqq.top/aptv-sdyd.m3u` |
+| 上海移动 | `https://iptv.wwjjqq.top/aptv-shyd.m3u` |
+| 山西移动 | `https://iptv.wwjjqq.top/aptv-sxyd.m3u` |
+| 浙江移动 | `https://iptv.wwjjqq.top/aptv-zjyd.m3u` |
+| APTV 通用 | `https://iptv.wwjjqq.top/aptv-iptv.m3u` |
+| HA-CMCC-IPTV | `https://iptv.wwjjqq.top/ha-cmcc-iptv.m3u` |
 
-HA-CMCC-IPTV 的文件名是 `ha-cmcc-iptv.m3u`。
-APTV 通用列表的文件名是 `aptv-iptv.m3u`；其中一些线路带有 APTV 专用请求标记，其他播放器是否兼容需要实际测试。
+也可以使用 [GitHub Pages](https://cumtwjq.github.io/iptv-subscriptions/aptv-hnyd.m3u) 或 [GitHub Raw](https://raw.githubusercontent.com/cumtwjq/iptv-subscriptions/main/m3u/aptv-hnyd.m3u) 地址，将文件名换成表中所需的文件名即可。APTV 通用列表中的部分线路带有 APTV 专用请求标记，其他播放器是否兼容需要实际测试。
 
 Raw 仍使用 `raw.githubusercontent.com`。如果电视所在网络访问不了该域名，换成自己的 Raw 也不能解决；可以使用 Pages 或 NAS 地址。
 
@@ -28,4 +44,4 @@ Raw 仍使用 `raw.githubusercontent.com`。如果电视所在网络访问不了
 
 在其他 NAS 上部署时，先拉取 `docker.1ms.run/library/python:3.13-slim` 镜像，再将 `nas/compose.yaml` 复制到项目目录，执行 `docker compose up -d`。首次启动需要能访问本仓库的 GitHub Pages。
 
-若要从外网访问，给 NAS 配置自己的 HTTPS 域名和反向代理，将该域名的一个路径或子域名转发到此服务的 `8098` 端口。此服务只缓存 M3U 列表，不转发视频流；频道能否播放仍取决于播放设备所在网络能否访问 M3U 内的地址。
+外网域名 `iptv.wwjjqq.top` 已指向 NAS 的 `8098` 端口。此服务只缓存 M3U 列表，不转发视频流；频道能否播放仍取决于播放设备所在网络能否访问 M3U 内的地址。
