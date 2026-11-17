@@ -58,11 +58,10 @@ class Handler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(CACHE), **kwargs)
 
-    def end_headers(self):
-        if self.path.split("?", 1)[0].endswith(".m3u"):
-            self.send_header("Content-Type", "audio/x-mpegurl; charset=utf-8")
-            self.send_header("Cache-Control", "no-cache")
-        super().end_headers()
+    def guess_type(self, path):
+        if path.endswith(".m3u"):
+            return "audio/x-mpegurl"
+        return super().guess_type(path)
 
 
 if __name__ == "__main__":
