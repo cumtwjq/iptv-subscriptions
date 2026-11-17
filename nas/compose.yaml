@@ -1,9 +1,15 @@
 services:
   m3u-mirror:
-    build: https://github.com/cumtwjq/iptv-subscriptions.git#main:nas
-    image: iptv-subscriptions-mirror:latest
-    pull_policy: build
+    image: docker.1ms.run/library/python:3.13-slim
+    pull_policy: never
     restart: unless-stopped
+    command:
+      - sh
+      - -c
+      - |
+        mkdir -p /app
+        python -c "import urllib.request; urllib.request.urlretrieve('https://cumtwjq.github.io/iptv-subscriptions/nas-server.py', '/app/server.py')"
+        exec python -u /app/server.py
     environment:
       # Example: https://YOUR_USERNAME.github.io/YOUR_REPOSITORY
       PAGES_BASE: https://cumtwjq.github.io/iptv-subscriptions

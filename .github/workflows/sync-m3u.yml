@@ -37,6 +37,7 @@ jobs:
           mkdir -p site
           cp m3u/*.m3u site/
           cp sources.json site/sources.json
+          cp nas/server.py site/nas-server.py
           printf '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>IPTV M3U</title><h1>IPTV M3U</h1><p>订阅文件请使用具体的 .m3u 地址。</p></html>\n' > site/index.html
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
