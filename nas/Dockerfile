@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM docker.1ms.run/library/python:3.13-slim
 WORKDIR /app
 COPY server.py /app/server.py
 EXPOSE 8098
