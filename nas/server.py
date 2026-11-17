@@ -30,14 +30,25 @@ def refresh() -> None:
     except Exception as exc:
         print(f"source list update failed: {exc}; retaining cached files", flush=True)
         return
-    for name in files:
-        url = f"{BASE}/{quote(name)}"
+    for source in sources:
+        name = source["file"]
+        urls = [f"{BASE}/{quote(name)}", source["url"]]
+        data = None
+        for url in urls:
+            try:
+                request = Request(url, headers={"User-Agent": "M3U-Mirror-NAS/1.0"})
+                with urlopen(request, timeout=30) as response:
+                    candidate = response.read(LIMIT + 1)
+                if len(candidate) > LIMIT or not candidate.lstrip(b"\xef\xbb\xbf \t\r\n").startswith(b"#EXTM3U"):
+                    raise ValueError("invalid or oversized M3U response")
+                data = candidate
+                break
+            except Exception as exc:
+                print(f"download failed for {name} from {url}: {exc}", flush=True)
+        if data is None:
+            print(f"refresh failed for {name}; keeping last good copy", flush=True)
+            continue
         try:
-            request = Request(url, headers={"User-Agent": "M3U-Mirror-NAS/1.0"})
-            with urlopen(request, timeout=30) as response:
-                data = response.read(LIMIT + 1)
-            if len(data) > LIMIT or not data.lstrip(b"\xef\xbb\xbf \t\r\n").startswith(b"#EXTM3U"):
-                raise ValueError("invalid or oversized M3U response")
             target = CACHE / name
             if not target.exists() or target.read_bytes() != data:
                 temporary = CACHE / f".{name}.tmp"

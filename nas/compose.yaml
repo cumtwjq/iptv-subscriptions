@@ -1,6 +1,8 @@
 services:
   m3u-mirror:
-    build: .
+    build: https://github.com/cumtwjq/iptv-subscriptions.git#main:nas
+    image: iptv-subscriptions-mirror:latest
+    pull_policy: build
     restart: unless-stopped
     environment:
       # Example: https://YOUR_USERNAME.github.io/YOUR_REPOSITORY
