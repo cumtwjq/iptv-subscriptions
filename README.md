@@ -10,7 +10,7 @@
 
 ## 使用方法
 
-1. 从下表选择所在地区的订阅；也可以尝试「APTV 通用」或「HA-CMCC-IPTV」。
+1. 从下表选择所在地区的订阅；河南移动有两份列表可选，另有「APTV 通用」列表。
 2. 在应用的订阅源设置中添加完整的 `.m3u` 地址。
 3. 等待频道列表加载，然后选择频道播放。
 
@@ -37,7 +37,7 @@
 | 山西移动 | `https://iptv.wwjjqq.top/aptv-sxyd.m3u` |
 | 浙江移动 | `https://iptv.wwjjqq.top/aptv-zjyd.m3u` |
 | APTV 通用 | `https://iptv.wwjjqq.top/aptv-iptv.m3u` |
-| HA-CMCC-IPTV | `https://iptv.wwjjqq.top/ha-cmcc-iptv.m3u` |
+| 河南移动（HA-CMCC-IPTV） | `https://iptv.wwjjqq.top/ha-cmcc-iptv.m3u` |
 
 ## 来源与更新
 
