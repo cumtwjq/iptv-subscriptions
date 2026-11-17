@@ -36,12 +36,4 @@ GitHub Actions 每 6 小时更新一次。来源清单见 `sources.json`；如�
 
 也可以使用 [GitHub Pages](https://cumtwjq.github.io/iptv-subscriptions/aptv-hnyd.m3u) 或 [GitHub Raw](https://raw.githubusercontent.com/cumtwjq/iptv-subscriptions/main/m3u/aptv-hnyd.m3u) 地址，将文件名换成表中所需的文件名即可。APTV 通用列表中的部分线路带有 APTV 专用请求标记，其他播放器是否兼容需要实际测试。
 
-Raw 仍使用 `raw.githubusercontent.com`。如果电视所在网络访问不了该域名，换成自己的 Raw 也不能解决；可以使用 Pages 或 NAS 地址。
-
-## 飞牛 NAS
-
-飞牛 NAS 上已部署 `iptv-m3u-cache` 项目，目录是 `/vol2/1000/docker/iptv-m3u-cache`，使用 `8098` 端口。项目直接运行 Python 基础镜像，不需要构建镜像。启动时从本仓库 Pages 下载服务程序，之后每 30 分钟更新订阅，并缓存到该目录的 `cache` 文件夹；订阅源暂时不可访问时保留上次可用文件。
-
-在其他 NAS 上部署时，先拉取 `docker.1ms.run/library/python:3.13-slim` 镜像，再将 `nas/compose.yaml` 复制到项目目录，执行 `docker compose up -d`。首次启动需要能访问本仓库的 GitHub Pages。
-
-外网域名 `iptv.wwjjqq.top` 已指向 NAS 的 `8098` 端口。此服务只缓存 M3U 列表，不转发视频流；频道能否播放仍取决于播放设备所在网络能否访问 M3U 内的地址。
+Raw 仍使用 `raw.githubusercontent.com`。如果电视所在网络访问不了该域名，可以使用上表中的外网地址或 GitHub Pages 地址。这里提供的是 M3U 列表，不转发视频流；频道能否播放仍取决于播放设备所在网络能否访问列表内的地址。
