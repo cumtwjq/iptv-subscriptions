@@ -1,0 +1,87 @@
+[
+  {
+    "name": "aptv-ahyd",
+    "url": "https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/ahyd.m3u",
+    "file": "aptv-ahyd.m3u"
+  },
+  {
+    "name": "aptv-bjyd",
+    "url": "https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/bjyd.m3u",
+    "file": "aptv-bjyd.m3u"
+  },
+  {
+    "name": "aptv-fjyd",
+    "url": "https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/fjyd.m3u",
+    "file": "aptv-fjyd.m3u"
+  },
+  {
+    "name": "aptv-gxyd",
+    "url": "https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/gxyd.m3u",
+    "file": "aptv-gxyd.m3u"
+  },
+  {
+    "name": "aptv-gzyd",
+    "url": "https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/gzyd.m3u",
+    "file": "aptv-gzyd.m3u"
+  },
+  {
+    "name": "aptv-hbyd",
+    "url": "https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/hbyd.m3u",
+    "file": "aptv-hbyd.m3u"
+  },
+  {
+    "name": "aptv-hljyd",
+    "url": "https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/hljyd.m3u",
+    "file": "aptv-hljyd.m3u"
+  },
+  {
+    "name": "aptv-hnyd",
+    "url": "https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/hnyd.m3u",
+    "file": "aptv-hnyd.m3u"
+  },
+  {
+    "name": "aptv-hunyd",
+    "url": "https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/hunyd.m3u",
+    "file": "aptv-hunyd.m3u"
+  },
+  {
+    "name": "aptv-jsyd",
+    "url": "https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/jsyd.m3u",
+    "file": "aptv-jsyd.m3u"
+  },
+  {
+    "name": "aptv-jxyd",
+    "url": "https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/jxyd.m3u",
+    "file": "aptv-jxyd.m3u"
+  },
+  {
+    "name": "aptv-lnyd",
+    "url": "https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/lnyd.m3u",
+    "file": "aptv-lnyd.m3u"
+  },
+  {
+    "name": "aptv-sdyd",
+    "url": "https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/sdyd.m3u",
+    "file": "aptv-sdyd.m3u"
+  },
+  {
+    "name": "aptv-shyd",
+    "url": "https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/shyd.m3u",
+    "file": "aptv-shyd.m3u"
+  },
+  {
+    "name": "aptv-sxyd",
+    "url": "https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/sxyd.m3u",
+    "file": "aptv-sxyd.m3u"
+  },
+  {
+    "name": "aptv-zjyd",
+    "url": "https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/zjyd.m3u",
+    "file": "aptv-zjyd.m3u"
+  },
+  {
+    "name": "ha-cmcc-iptv",
+    "url": "https://elykia093.github.io/HA-CMCC-IPTV/index.m3u",
+    "file": "ha-cmcc-iptv.m3u"
+  }
+]

@@ -1,0 +1,45 @@
+name: Sync selected M3U files
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 */6 * * *'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: m3u-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download selected playlists
+        run: python sync.py
+      - name: Commit changed playlists
+        run: |
+          git add -A m3u/
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Update mirrored M3U playlists"
+          git push
+      - name: Prepare Pages site
+        run: |
+          mkdir -p site
+          cp m3u/*.m3u site/
+          cp sources.json site/sources.json
+          printf '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>IPTV M3U</title><h1>IPTV M3U</h1><p>订阅文件请使用具体的 .m3u 地址。</p></html>\n' > site/index.html
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - uses: actions/deploy-pages@v4

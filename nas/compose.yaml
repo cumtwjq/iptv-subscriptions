@@ -1,0 +1,12 @@
+services:
+  m3u-mirror:
+    build: .
+    restart: unless-stopped
+    environment:
+      # Example: https://YOUR_USERNAME.github.io/YOUR_REPOSITORY
+      PAGES_BASE: https://cumtwjq.github.io/iptv-subscriptions
+      REFRESH_SECONDS: 1800
+    ports:
+      - "8098:8098"
+    volumes:
+      - ./cache:/data

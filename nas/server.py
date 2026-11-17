@@ -1,0 +1,72 @@
+"""Cache mirrored playlists from GitHub Pages and serve them on the LAN."""
+
+import os
+import json
+import threading
+import time
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+from urllib.parse import quote
+from urllib.request import Request, urlopen
+
+
+CACHE = Path("/data")
+BASE = os.environ["PAGES_BASE"].rstrip("/")
+INTERVAL = max(60, int(os.environ.get("REFRESH_SECONDS", "1800")))
+LIMIT = 20 * 1024 * 1024
+
+if not BASE.startswith("https://"):
+    raise ValueError("set PAGES_BASE to your own GitHub Pages URL")
+
+
+def refresh() -> None:
+    try:
+        request = Request(f"{BASE}/sources.json", headers={"User-Agent": "M3U-Mirror-NAS/1.0"})
+        with urlopen(request, timeout=30) as response:
+            sources = json.load(response)
+        files = [source["file"] for source in sources]
+        if not files or any(Path(name).name != name or not name.endswith(".m3u") for name in files):
+            raise ValueError("invalid source list")
+    except Exception as exc:
+        print(f"source list update failed: {exc}; retaining cached files", flush=True)
+        return
+    for name in files:
+        url = f"{BASE}/{quote(name)}"
+        try:
+            request = Request(url, headers={"User-Agent": "M3U-Mirror-NAS/1.0"})
+            with urlopen(request, timeout=30) as response:
+                data = response.read(LIMIT + 1)
+            if len(data) > LIMIT or not data.lstrip(b"\xef\xbb\xbf \t\r\n").startswith(b"#EXTM3U"):
+                raise ValueError("invalid or oversized M3U response")
+            target = CACHE / name
+            if not target.exists() or target.read_bytes() != data:
+                temporary = CACHE / f".{name}.tmp"
+                temporary.write_bytes(data)
+                os.replace(temporary, target)
+            print(f"cached {name}: {len(data)} bytes", flush=True)
+        except Exception as exc:
+            print(f"refresh failed for {name}: {exc}; keeping last good copy", flush=True)
+
+
+def refresh_loop() -> None:
+    while True:
+        refresh()
+        time.sleep(INTERVAL)
+
+
+class Handler(SimpleHTTPRequestHandler):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, directory=str(CACHE), **kwargs)
+
+    def end_headers(self):
+        if self.path.split("?", 1)[0].endswith(".m3u"):
+            self.send_header("Content-Type", "audio/x-mpegurl; charset=utf-8")
+            self.send_header("Cache-Control", "no-cache")
+        super().end_headers()
+
+
+if __name__ == "__main__":
+    CACHE.mkdir(parents=True, exist_ok=True)
+    threading.Thread(target=refresh_loop, daemon=True).start()
+    print("serving cached playlists on port 8098", flush=True)
+    ThreadingHTTPServer(("0.0.0.0", 8098), Handler).serve_forever()
