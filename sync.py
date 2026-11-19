@@ -37,6 +37,11 @@ EXTRA_SOURCES = (
     ),
 )
 GROUP_RE = re.compile(r'group-title="([^"]*)"')
+REPLACEMENT_CHANNEL = (
+    '#EXTINF:-1 tvg-logo="https://epg.112114.xyz/logo/%E4%B8%83%E9%BE%99%E7%8F%A0.png" '
+    'group-title="动漫",七龙珠\n'
+    'https://huyazhibo.de5.net/?id=10279885\n'
+).encode("utf-8")
 
 
 def download(url: str) -> bytes:
@@ -76,7 +81,7 @@ def selected_channels(data: bytes, groups: dict[str, str]) -> tuple[bytes, int]:
             finish()
             match = GROUP_RE.search(line)
             group = groups.get(match.group(1)) if match else None
-            selected = group is not None
+            selected = group is not None and line.rsplit(",", 1)[-1].strip() != "七龙珠"
             entry = [GROUP_RE.sub(f'group-title="{group}"', line, count=1) if group else line]
         elif entry:
             entry.append(line)
@@ -101,10 +106,13 @@ def merge_general(base: bytes, previous: bytes) -> bytes:
             if old_end < 0:
                 print(f"extra {key}: unavailable ({exc}); no prior copy")
                 continue
-            extra = previous[old_start + len(start):old_end]
+            extra, _ = selected_channels(
+                previous[old_start + len(start):old_end],
+                {"电影": "电影", "电视剧": "电视剧", "动漫": "动漫"},
+            )
             print(f"extra {key}: unavailable ({exc}); retained prior copy")
         combined += start + extra + end
-    return combined
+    return combined + REPLACEMENT_CHANNEL
 
 
 def main() -> None:
