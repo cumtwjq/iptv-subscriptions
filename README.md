@@ -10,7 +10,7 @@
 
 ## 使用方法
 
-1. 从下表选择所在地区的订阅；河南移动有两份列表可选，另有「APTV 通用」列表。
+1. 从下表选择所在地区的订阅；河南移动有两份列表可选，另有包含电影、电视剧和动漫频道的「通用」列表。
 2. 在应用的订阅源设置中添加完整的 `.m3u` 地址。
 3. 等待频道列表加载，然后选择频道播放。
 
@@ -36,12 +36,12 @@
 | 上海移动 | `https://iptv.wwjjqq.top/aptv-shyd.m3u` |
 | 山西移动 | `https://iptv.wwjjqq.top/aptv-sxyd.m3u` |
 | 浙江移动 | `https://iptv.wwjjqq.top/aptv-zjyd.m3u` |
-| APTV 通用 | `https://iptv.wwjjqq.top/aptv-iptv.m3u` |
+| 通用（含电影、电视剧、动漫） | `https://iptv.wwjjqq.top/aptv-iptv.m3u` |
 | 河南移动（HA-CMCC-IPTV） | `https://iptv.wwjjqq.top/ha-cmcc-iptv.m3u` |
 
 ## 来源与更新
 
-订阅列表来自 [Kimentanm/aptv](https://github.com/Kimentanm/aptv) 和 [Elykia093/HA-CMCC-IPTV](https://github.com/Elykia093/HA-CMCC-IPTV)。本项目约每 6 小时同步一次 M3U 文件；来源暂时不可用时，保留上次成功同步的版本。具体文件与来源见 [sources.json](sources.json)。
+地区订阅来自 [Kimentanm/aptv](https://github.com/Kimentanm/aptv)，河南移动的另一份订阅来自 [Elykia093/HA-CMCC-IPTV](https://github.com/Elykia093/HA-CMCC-IPTV)。通用订阅以 Kimentanm/aptv 为基础，另加入 [445569 的直播列表](https://iptv.445569.xyz/live.m3u) 和 [suxuang/myIPTV](https://github.com/suxuang/myIPTV) 中的电影、电视剧、动漫频道，包含虎牙影视和斗鱼影视；新增频道归入「电影」「电视剧」「动漫」三个分组。本项目约每 6 小时同步一次 M3U 文件；来源暂时不可用时，保留上次成功同步的版本。地区订阅的具体文件与来源见 [sources.json](sources.json)。
 
 也可以使用 [GitHub Pages](https://cumtwjq.github.io/iptv-subscriptions/aptv-hnyd.m3u) 或 [GitHub Raw](https://raw.githubusercontent.com/cumtwjq/iptv-subscriptions/main/m3u/aptv-hnyd.m3u) 地址，将文件名换成表中所需的文件名即可。APTV 通用列表中的部分线路带有 APTV 专用请求标记，其他播放器是否兼容需要实际测试。
 

@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - nas/server.py
+      - sync.py
   workflow_dispatch:
   schedule:
     - cron: '17 */6 * * *'

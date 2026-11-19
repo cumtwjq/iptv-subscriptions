@@ -1,7 +1,10 @@
 """Copy selected public M3U playlists into this repository."""
 
+from __future__ import annotations
+
 import json
 import os
+import re
 from pathlib import Path
 from urllib.request import Request, urlopen
 
@@ -9,6 +12,31 @@ from urllib.request import Request, urlopen
 ROOT = Path(__file__).resolve().parent
 DEST = ROOT / "m3u"
 LIMIT = 20 * 1024 * 1024
+GENERAL_LIST = "aptv-iptv.m3u"
+EXTRA_SOURCES = (
+    (
+        "445569",
+        "https://iptv.445569.xyz/live.m3u",
+        {
+            "🎞️电影直播": "电影",
+            "📺电视剧直播": "电视剧",
+            "🎎动漫直播": "动漫",
+            "🤣沙雕动画直播": "动漫",
+        },
+    ),
+    (
+        "suxuang",
+        "https://raw.githubusercontent.com/suxuang/myIPTV/main/ipv4.m3u",
+        {
+            "电视剧频道": "电视剧",
+            "动画频道": "动漫",
+            "虎牙影视": "电影",
+            "斗鱼影视": "电影",
+            "点播电影": "电影",
+        },
+    ),
+)
+GROUP_RE = re.compile(r'group-title="([^"]*)"')
 
 
 def download(url: str) -> bytes:
@@ -20,6 +48,63 @@ def download(url: str) -> bytes:
     if not data.lstrip(b"\xef\xbb\xbf \t\r\n").startswith(b"#EXTM3U"):
         raise ValueError("response is not an extended M3U playlist")
     return data
+
+
+def selected_channels(data: bytes, groups: dict[str, str]) -> tuple[bytes, int]:
+    """Keep playable entries in selected groups, including their playback options."""
+    result = []
+    count = 0
+    entry = []
+    selected = False
+
+    def finish() -> None:
+        nonlocal count
+        if not selected or not entry:
+            return
+        # An entry can include commented-out old links before its live link.
+        active = [line for line in entry[1:] if line and not line.startswith("#")]
+        if not active:
+            return
+        result.append("\n".join([entry[0], *(
+            line for line in entry[1:] if line.startswith(("#EXTVLCOPT", "#KODIPROP"))
+        ), active[0]]))
+        count += 1
+
+    for line in data.decode("utf-8-sig").splitlines():
+        line = line.strip()
+        if line.startswith("#EXTINF"):
+            finish()
+            match = GROUP_RE.search(line)
+            group = groups.get(match.group(1)) if match else None
+            selected = group is not None
+            entry = [GROUP_RE.sub(f'group-title="{group}"', line, count=1) if group else line]
+        elif entry:
+            entry.append(line)
+    finish()
+    return ("\n".join(result) + "\n").encode("utf-8") if result else b"", count
+
+
+def merge_general(base: bytes, previous: bytes) -> bytes:
+    """Refresh each extra independently; retain its last good copy on failure."""
+    combined = base.rstrip(b"\r\n") + b"\n"
+    for key, url, groups in EXTRA_SOURCES:
+        start = f"# BEGIN EXTRA {key}\n".encode()
+        end = f"# END EXTRA {key}\n".encode()
+        try:
+            extra, count = selected_channels(download(url), groups)
+            if not extra:
+                raise ValueError("no playable channels in selected groups")
+            print(f"extra {key}: {count} channels")
+        except Exception as exc:
+            old_start = previous.find(start)
+            old_end = previous.find(end, old_start + len(start)) if old_start >= 0 else -1
+            if old_end < 0:
+                print(f"extra {key}: unavailable ({exc}); no prior copy")
+                continue
+            extra = previous[old_start + len(start):old_end]
+            print(f"extra {key}: unavailable ({exc}); retained prior copy")
+        combined += start + extra + end
+    return combined
 
 
 def main() -> None:
@@ -34,6 +119,9 @@ def main() -> None:
         target = DEST / filename
         try:
             data = download(source["url"])
+            if filename == GENERAL_LIST:
+                previous = target.read_bytes() if target.exists() else b""
+                data = merge_general(data, previous)
             if not target.exists() or target.read_bytes() != data:
                 temporary = target.with_suffix(".m3u.tmp")
                 temporary.write_bytes(data)
