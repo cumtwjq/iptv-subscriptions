@@ -422,6 +422,8 @@ https://huyazhibo.de5.net/?id=20985816
 https://huyazhibo.de5.net/?id=26355857
 #EXTINF:-1 tvg-logo="https://epg.112114.xyz/logo/%E5%B9%B4%E4%BB%A3%E5%89%A7%E4%B8%93%E5%8C%BA.png" group-title="电视剧",年代剧专区
 https://huyazhibo.de5.net/?id=20969095
+#EXTINF:-1 tvg-logo="https://epg.112114.xyz/logo/%E4%B8%83%E9%BE%99%E7%8F%A0.png" group-title="动漫",七龙珠
+https://huyazhibo.de5.net/?id=10279885
 #EXTINF:-1 tvg-logo="https://epg.112114.xyz/logo/%E5%90%8D%E4%BE%A6%E6%8E%A2%E6%9F%AF%E5%8D%97.png" group-title="动漫",名侦探柯南
 https://huyazhibo.de5.net/?id=30080236
 #EXTINF:-1 tvg-logo="https://epg.112114.xyz/logo/%E7%81%AB%E5%BD%B1%E5%BF%8D%E8%80%85.png" group-title="动漫",火影忍者
@@ -781,5 +783,3 @@ https://vip.ffzy-play7.com/20230116/11563_b9f44814/index.m3u8
 #EXTINF:-1 tvg-logo="https://ghproxy.net/raw.githubusercontent.com/suxuang/myIPTV/main/img/电影.png" group-title="电影",龙门飞甲
 http://jsmov2.a.yximgs.com/bs3/video-hls/5203346449046555193_hlsb.m3u8
 # END EXTRA suxuang
-#EXTINF:-1 tvg-logo="https://epg.112114.xyz/logo/%E4%B8%83%E9%BE%99%E7%8F%A0.png" group-title="动漫",七龙珠
-https://huyazhibo.de5.net/?id=10279885

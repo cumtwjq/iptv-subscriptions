@@ -112,6 +112,9 @@ def merge_general(base: bytes, previous: bytes) -> bytes:
             )
             print(f"extra {key}: unavailable ({exc}); retained prior copy")
         combined += start + extra + end
+    first_anime = re.search(r'(?m)^#EXTINF:[^\r\n]*group-title="动漫"'.encode("utf-8"), combined)
+    if first_anime:
+        return combined[:first_anime.start()] + REPLACEMENT_CHANNEL + combined[first_anime.start():]
     return combined + REPLACEMENT_CHANNEL
 
 
