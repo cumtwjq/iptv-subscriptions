@@ -13,6 +13,11 @@ ROOT = Path(__file__).resolve().parent
 DEST = ROOT / "m3u"
 LIMIT = 20 * 1024 * 1024
 GENERAL_LIST = "aptv-iptv.m3u"
+EPG_URLS = (
+    "https://epg.zsdc.eu.org/t.xml",
+    "http://epg.51zmt.top:8000/e.xml.gz",
+)
+EPG_ATTRIBUTE_RE = re.compile(r'\s(x-tvg-url|url-tvg|tvg-url)="[^"]*"')
 EXTRA_SOURCES = (
     (
         "445569",
@@ -53,6 +58,20 @@ def download(url: str) -> bytes:
     if not data.lstrip(b"\xef\xbb\xbf \t\r\n").startswith(b"#EXTM3U"):
         raise ValueError("response is not an extended M3U playlist")
     return data
+
+
+def replace_epg(data: bytes) -> bytes:
+    """Replace only the EPG header; preserve channel data and other options."""
+    first_line, newline, rest = data.partition(b"\n")
+    header = first_line.decode("utf-8-sig").rstrip("\r")
+    if not header.startswith("#EXTM3U"):
+        raise ValueError("missing M3U header")
+    match = EPG_ATTRIBUTE_RE.search(header)
+    attribute = match.group(1) if match else "x-tvg-url"
+    other_options = EPG_ATTRIBUTE_RE.sub("", header)[len("#EXTM3U"):]
+    replacement = f'#EXTM3U {attribute}="{",".join(EPG_URLS)}"{other_options}'
+    ending = b"\r\n" if first_line.endswith(b"\r") else newline
+    return replacement.encode("utf-8") + ending + rest
 
 
 def selected_channels(data: bytes, groups: dict[str, str]) -> tuple[bytes, int]:
@@ -129,7 +148,7 @@ def main() -> None:
             raise ValueError(f"invalid destination filename: {filename}")
         target = DEST / filename
         try:
-            data = download(source["url"])
+            data = replace_epg(download(source["url"]))
             if filename == GENERAL_LIST:
                 previous = target.read_bytes() if target.exists() else b""
                 data = merge_general(data, previous)

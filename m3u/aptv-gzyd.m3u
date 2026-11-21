@@ -1,4 +1,4 @@
-#EXTM3U x-tvg-url="https://epg.aptv.app/pp.xml.gz"
+#EXTM3U x-tvg-url="https://epg.zsdc.eu.org/t.xml,http://epg.51zmt.top:8000/e.xml.gz"
 #EXT-X-APP APTV
 #EXT-X-APTV-TYPE remote
 #EXT-X-SUB-URL https://gh.aptv.app/https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/gzyd.m3u
