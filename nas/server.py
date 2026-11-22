@@ -21,6 +21,21 @@ if not BASE.startswith("https://"):
 
 def refresh() -> None:
     try:
+        request = Request(f"{BASE}/index.html", headers={"User-Agent": "M3U-Mirror-NAS/1.0"})
+        with urlopen(request, timeout=30) as response:
+            homepage = response.read(1024 * 1024 + 1)
+        if len(homepage) > 1024 * 1024 or b"<!doctype html" not in homepage[:512].lower():
+            raise ValueError("invalid or oversized homepage")
+        target = CACHE / "index.html"
+        if not target.exists() or target.read_bytes() != homepage:
+            temporary = CACHE / ".index.html.tmp"
+            temporary.write_bytes(homepage)
+            os.replace(temporary, target)
+        print("cached subscription homepage", flush=True)
+    except Exception as exc:
+        print(f"homepage refresh failed: {exc}; keeping last good copy", flush=True)
+
+    try:
         request = Request(f"{BASE}/sources.json", headers={"User-Agent": "M3U-Mirror-NAS/1.0"})
         with urlopen(request, timeout=30) as response:
             sources = json.load(response)
