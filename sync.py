@@ -13,6 +13,9 @@ ROOT = Path(__file__).resolve().parent
 DEST = ROOT / "m3u"
 LIMIT = 20 * 1024 * 1024
 GENERAL_LIST = "aptv-iptv.m3u"
+HENAN_LIST = "ha-cmcc-iptv.m3u"
+CCTV10_PREFERRED_STREAM = b"/3221226483/index.m3u8"
+CCTV16_ADDED_STREAM = b"http://101.35.240.114:88/live.php?id=CCTV16"
 EPG_URLS = (
     "https://epg.zsdc.eu.org/t.xml",
     "http://epg.51zmt.top:8000/e.xml.gz",
@@ -72,6 +75,54 @@ def replace_epg(data: bytes) -> bytes:
     replacement = f'#EXTM3U {attribute}="{",".join(EPG_URLS)}"{other_options}'
     ending = b"\r\n" if first_line.endswith(b"\r") else newline
     return replacement.encode("utf-8") + ending + rest
+
+
+def prefer_henan_cctv10(data: bytes) -> bytes:
+    """Keep the chosen CCTV10 stream first when the upstream list refreshes."""
+    lines = data.splitlines(keepends=True)
+    entries = [
+        index for index, line in enumerate(lines)
+        if line.startswith(b"#EXTINF:")
+    ]
+    cctv10 = [
+        position for position, start in enumerate(entries)
+        if b'tvg-id="CCTV10"' in lines[start]
+    ]
+    if len(cctv10) < 2:
+        return data
+    first = entries[cctv10[0]]
+    for position in cctv10[1:]:
+        start = entries[position]
+        end = entries[position + 1] if position + 1 < len(entries) else len(lines)
+        if CCTV10_PREFERRED_STREAM in b"".join(lines[start:end]):
+            return b"".join(lines[:first] + lines[start:end] + lines[first:start] + lines[end:])
+    return data
+
+
+def add_henan_cctv16(data: bytes) -> bytes:
+    """Put the requested stream before the original CCTV16 line without duplicates."""
+    lines = data.splitlines(keepends=True)
+    entries = [
+        index for index, line in enumerate(lines)
+        if line.startswith(b"#EXTINF:")
+    ]
+    cctv16 = [
+        position for position, start in enumerate(entries)
+        if b'tvg-id="CCTV16"' in lines[start]
+    ]
+    if not cctv16:
+        return data
+    first = entries[cctv16[0]]
+    for position in cctv16:
+        start = entries[position]
+        end = entries[position + 1] if position + 1 < len(entries) else len(lines)
+        if CCTV16_ADDED_STREAM in b"".join(lines[start:end]):
+            if start == first:
+                return data
+            return b"".join(lines[:first] + lines[start:end] + lines[first:start] + lines[end:])
+    newline = b"\r\n" if lines[first].endswith(b"\r\n") else b"\n"
+    added = lines[first].rstrip(b"\r\n") + newline + CCTV16_ADDED_STREAM + newline
+    return b"".join(lines[:first]) + added + b"".join(lines[first:])
 
 
 def selected_channels(data: bytes, groups: dict[str, str]) -> tuple[bytes, int]:
@@ -149,6 +200,9 @@ def main() -> None:
         target = DEST / filename
         try:
             data = replace_epg(download(source["url"]))
+            if filename == HENAN_LIST:
+                data = prefer_henan_cctv10(data)
+                data = add_henan_cctv16(data)
             if filename == GENERAL_LIST:
                 previous = target.read_bytes() if target.exists() else b""
                 data = merge_general(data, previous)
