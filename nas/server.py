@@ -71,7 +71,7 @@ class Handler(SimpleHTTPRequestHandler):
 
     def guess_type(self, path):
         if path.endswith(".m3u"):
-            return "text/plain; charset=utf-8"
+            return "audio/x-mpegurl"
         return super().guess_type(path)
 
 
