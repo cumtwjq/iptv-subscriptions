@@ -22,6 +22,11 @@
     a { color: #1558a6; text-decoration: none; }
     a:hover { text-decoration: underline; }
     code { overflow-wrap: anywhere; font-size: 13px; }
+    .address { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .copy { flex: 0 0 38px; width: 38px; height: 36px; display: inline-grid; place-items: center; border: 0; border-radius: 8px; color: #536174; background: #f1f4f8; cursor: pointer; }
+    .copy:hover { color: #1558a6; background: #e4edf8; }
+    .copy svg { width: 19px; height: 19px; }
+    .copy.done { color: #17824b; }
     footer { color: #68758a; font-size: 13px; }
     @media (max-width: 600px) { section { padding: 14px; } th, td { padding: 9px 7px; } code { font-size: 12px; } }
   </style>
@@ -58,5 +63,39 @@
     <section><h2>使用说明</h2><p>在播放器的订阅设置中添加上方完整地址。列表只提供频道与播放地址，不转发视频流；实际播放取决于频道线路及设备所在网络。</p><p class="hint">节目单：<a href="https://epg.zsdc.eu.org/t.xml">节目单一</a> · <a href="http://epg.51zmt.top:8000/e.xml.gz">节目单二</a></p></section>
     <footer>订阅列表按来源更新；来源内容未变化时不会重复改写列表。</footer>
   </main>
+  <script>
+    document.querySelectorAll("td a[href$='.m3u']").forEach((link) => {
+      const cell = link.closest("td");
+      const url = link.href;
+      const wrap = document.createElement("div");
+      wrap.className = "address";
+      link.parentNode.insertBefore(wrap, link);
+      wrap.appendChild(link);
+      const button = document.createElement("button");
+      button.className = "copy";
+      button.type = "button";
+      button.title = "复制订阅地址";
+      button.setAttribute("aria-label", "复制订阅地址");
+      button.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>';
+      button.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(url);
+        } catch (_) {
+          const input = document.createElement("textarea");
+          input.value = url;
+          input.style.position = "fixed";
+          input.style.opacity = "0";
+          document.body.appendChild(input);
+          input.select();
+          document.execCommand("copy");
+          input.remove();
+        }
+        button.classList.add("done");
+        button.title = "已复制";
+        setTimeout(() => { button.classList.remove("done"); button.title = "复制订阅地址"; }, 1400);
+      });
+      wrap.appendChild(button);
+    });
+  </script>
 </body>
 </html>
