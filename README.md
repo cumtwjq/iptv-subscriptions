@@ -45,6 +45,6 @@
 
 本项目整理并提供 Android TV 可用的 M3U 直播订阅，方便在电视、电视盒子及兼容播放器中按地区选择频道。河南用户可优先使用「河南移动（主）」；另有 Kimentanm/aptv 的河南移动列表作为备用。河南主列表、湖南移动列表和通用列表都包含「电影」「电视剧」「动漫」分组，通用列表另收录虎牙影视和斗鱼影视。地区频道主要来自 [Kimentanm/aptv](https://github.com/Kimentanm/aptv)，河南主列表来自 [Elykia093/HA-CMCC-IPTV](https://github.com/Elykia093/HA-CMCC-IPTV)；影视内容补充自 [445569 的直播列表](https://iptv.445569.xyz/live.m3u) 和 [suxuang/myIPTV](https://github.com/suxuang/myIPTV)。订阅源定期检查；只有源文件内容有变化时才更新列表和网站。部分频道能否播放取决于来源线路及设备所在网络。
 
-也可以使用 [GitHub Pages](https://cumtwjq.github.io/iptv-subscriptions/aptv-hnyd.m3u) 或 [GitHub Raw](https://raw.githubusercontent.com/cumtwjq/iptv-subscriptions/main/m3u/aptv-hnyd.m3u) 地址，将文件名换成表中所需的文件名即可。APTV 通用列表中的部分线路带有 APTV 专用请求标记，其他播放器是否兼容需要实际测试。
+也可以打开 [GitHub Pages 订阅首页](https://cumtwjq.github.io/iptv-subscriptions/)，从表格中选择需要的订阅地址。APTV 通用列表中的部分线路带有 APTV 专用请求标记，其他播放器是否兼容需要实际测试。
 
 Raw 仍使用 `raw.githubusercontent.com`。如果电视所在网络访问不了该域名，可以使用上表中的外网地址或 GitHub Pages 地址。这里提供的是 M3U 列表，不转发视频流；频道能否播放仍取决于播放设备所在网络能否访问列表内的地址。
