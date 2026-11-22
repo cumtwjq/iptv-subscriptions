@@ -29,8 +29,8 @@
 | 贵州移动 | `https://iptv.wwjjqq.top/aptv-gzyd.m3u` |
 | 河北移动 | `https://iptv.wwjjqq.top/aptv-hbyd.m3u` |
 | 黑龙江移动 | `https://iptv.wwjjqq.top/aptv-hljyd.m3u` |
-| 河南移动 | `https://iptv.wwjjqq.top/aptv-hnyd.m3u` |
-| 湖南移动 | `https://iptv.wwjjqq.top/aptv-hunyd.m3u` |
+| 河南移动（备用） | `https://iptv.wwjjqq.top/aptv-hnyd.m3u` |
+| 湖南移动（含电影、电视剧、动漫） | `https://iptv.wwjjqq.top/aptv-hunyd.m3u` |
 | 江苏移动 | `https://iptv.wwjjqq.top/aptv-jsyd.m3u` |
 | 江西移动 | `https://iptv.wwjjqq.top/aptv-jxyd.m3u` |
 | 辽宁移动 | `https://iptv.wwjjqq.top/aptv-lnyd.m3u` |
@@ -39,11 +39,11 @@
 | 山西移动 | `https://iptv.wwjjqq.top/aptv-sxyd.m3u` |
 | 浙江移动 | `https://iptv.wwjjqq.top/aptv-zjyd.m3u` |
 | 通用（含电影、电视剧、动漫） | `https://iptv.wwjjqq.top/aptv-iptv.m3u` |
-| 河南移动（HA-CMCC-IPTV） | `https://iptv.wwjjqq.top/ha-cmcc-iptv.m3u` |
+| 河南移动（主，含电影、电视剧、动漫） | `https://iptv.wwjjqq.top/ha-cmcc-iptv.m3u` |
 
 ## 来源与更新
 
-地区订阅来自 [Kimentanm/aptv](https://github.com/Kimentanm/aptv)，河南移动的另一份订阅来自 [Elykia093/HA-CMCC-IPTV](https://github.com/Elykia093/HA-CMCC-IPTV)。通用订阅以 Kimentanm/aptv 为基础，另加入 [445569 的直播列表](https://iptv.445569.xyz/live.m3u) 和 [suxuang/myIPTV](https://github.com/suxuang/myIPTV) 中的电影、电视剧、动漫频道，包含虎牙影视和斗鱼影视；新增频道归入「电影」「电视剧」「动漫」三个分组。本项目约每 6 小时同步一次 M3U 文件；来源暂时不可用时，保留上次成功同步的版本。地区订阅的具体文件与来源见 [sources.json](sources.json)。
+本项目整理并提供 Android TV 可用的 M3U 直播订阅，方便在电视、电视盒子及兼容播放器中按地区选择频道。河南用户可优先使用「河南移动（主）」；另有 Kimentanm/aptv 的河南移动列表作为备用。河南主列表、湖南移动列表和通用列表都包含「电影」「电视剧」「动漫」分组，通用列表另收录虎牙影视和斗鱼影视。地区频道主要来自 [Kimentanm/aptv](https://github.com/Kimentanm/aptv)，河南主列表来自 [Elykia093/HA-CMCC-IPTV](https://github.com/Elykia093/HA-CMCC-IPTV)；影视内容补充自 [445569 的直播列表](https://iptv.445569.xyz/live.m3u) 和 [suxuang/myIPTV](https://github.com/suxuang/myIPTV)。订阅源定期检查；只有源文件内容有变化时才更新列表和网站。部分频道能否播放取决于来源线路及设备所在网络。
 
 也可以使用 [GitHub Pages](https://cumtwjq.github.io/iptv-subscriptions/aptv-hnyd.m3u) 或 [GitHub Raw](https://raw.githubusercontent.com/cumtwjq/iptv-subscriptions/main/m3u/aptv-hnyd.m3u) 地址，将文件名换成表中所需的文件名即可。APTV 通用列表中的部分线路带有 APTV 专用请求标记，其他播放器是否兼容需要实际测试。
 

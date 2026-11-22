@@ -14,6 +14,7 @@ DEST = ROOT / "m3u"
 LIMIT = 20 * 1024 * 1024
 GENERAL_LIST = "aptv-iptv.m3u"
 HENAN_LIST = "ha-cmcc-iptv.m3u"
+HUNAN_LIST = "aptv-hunyd.m3u"
 CCTV10_PREFERRED_STREAM = b"/3221226483/index.m3u8"
 CCTV16_ADDED_STREAM = b"http://101.35.240.114:88/live.php?id=CCTV16"
 EPG_URLS = (
@@ -159,10 +160,10 @@ def selected_channels(data: bytes, groups: dict[str, str]) -> tuple[bytes, int]:
     return ("\n".join(result) + "\n").encode("utf-8") if result else b"", count
 
 
-def merge_general(base: bytes, previous: bytes) -> bytes:
+def merge_with_extras(base: bytes, previous: bytes, sources=EXTRA_SOURCES) -> bytes:
     """Refresh each extra independently; retain its last good copy on failure."""
     combined = base.rstrip(b"\r\n") + b"\n"
-    for key, url, groups in EXTRA_SOURCES:
+    for key, url, groups in sources:
         start = f"# BEGIN EXTRA {key}\n".encode()
         end = f"# END EXTRA {key}\n".encode()
         try:
@@ -182,10 +183,12 @@ def merge_general(base: bytes, previous: bytes) -> bytes:
             )
             print(f"extra {key}: unavailable ({exc}); retained prior copy")
         combined += start + extra + end
-    first_anime = re.search(r'(?m)^#EXTINF:[^\r\n]*group-title="动漫"'.encode("utf-8"), combined)
-    if first_anime:
-        return combined[:first_anime.start()] + REPLACEMENT_CHANNEL + combined[first_anime.start():]
-    return combined + REPLACEMENT_CHANNEL
+    if sources is EXTRA_SOURCES:
+        first_anime = re.search(r'(?m)^#EXTINF:[^\r\n]*group-title="动漫"'.encode("utf-8"), combined)
+        if first_anime:
+            return combined[:first_anime.start()] + REPLACEMENT_CHANNEL + combined[first_anime.start():]
+        return combined + REPLACEMENT_CHANNEL
+    return combined
 
 
 def main() -> None:
@@ -203,9 +206,9 @@ def main() -> None:
             if filename == HENAN_LIST:
                 data = prefer_henan_cctv10(data)
                 data = add_henan_cctv16(data)
-            if filename == GENERAL_LIST:
+            if filename in {GENERAL_LIST, HENAN_LIST, HUNAN_LIST}:
                 previous = target.read_bytes() if target.exists() else b""
-                data = merge_general(data, previous)
+                data = merge_with_extras(data, previous)
             if not target.exists() or target.read_bytes() != data:
                 temporary = target.with_suffix(".m3u.tmp")
                 temporary.write_bytes(data)

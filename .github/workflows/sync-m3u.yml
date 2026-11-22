@@ -5,9 +5,12 @@ on:
     paths:
       - nas/server.py
       - sync.py
+      - README.md
+      - site-index.html
+      - sources.json
   workflow_dispatch:
   schedule:
-    - cron: '17 */6 * * *'
+    - cron: '17 2 * * *'
 
 permissions:
   contents: write
@@ -29,22 +32,28 @@ jobs:
       - name: Download selected playlists
         run: python sync.py
       - name: Commit changed playlists
+        id: changes
         run: |
           git add -A m3u/
-          if git diff --cached --quiet; then exit 0; fi
+          if git diff --cached --quiet; then echo "changed=false" >> "$GITHUB_OUTPUT"; exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "Update mirrored M3U playlists"
           git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
       - name: Prepare Pages site
+        if: steps.changes.outputs.changed == 'true' || github.event_name != 'schedule'
         run: |
           mkdir -p site
           cp m3u/*.m3u site/
           cp sources.json site/sources.json
           cp nas/server.py site/nas-server.py
-          printf '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>IPTV M3U</title><h1>IPTV M3U</h1><p>订阅文件请使用具体的 .m3u 地址。</p></html>\n' > site/index.html
+          cp site-index.html site/index.html
       - uses: actions/configure-pages@v5
+        if: steps.changes.outputs.changed == 'true' || github.event_name != 'schedule'
       - uses: actions/upload-pages-artifact@v3
+        if: steps.changes.outputs.changed == 'true' || github.event_name != 'schedule'
         with:
           path: site
       - uses: actions/deploy-pages@v4
+        if: steps.changes.outputs.changed == 'true' || github.event_name != 'schedule'
